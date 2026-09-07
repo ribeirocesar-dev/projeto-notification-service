@@ -74,4 +74,12 @@ public class NotificationEntity {
     public void setStatusPending() {
         status = NotificationStatus.PENDING;
     }
+
+    public void setStatusSent() {
+        status = NotificationStatus.SENT;
+    }
+
+    public void setStatusFailed() {
+        status = NotificationStatus.FAILED;
+    }
 }
