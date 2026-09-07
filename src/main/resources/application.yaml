@@ -6,7 +6,7 @@ spring:
         name: notification-service
 
     datasource:
-        url: jdbc:postgresql://localhost:5433/notification_db
+        url: jdbc:postgresql://localhost:5432/notification_db
         username: admin
         password: adminpassword
         driver-class-name: org.postgresql.Driver
@@ -24,6 +24,9 @@ spring:
         port: 5672
         username: guest
         password: guest
+        listener:
+            simple:
+                default-requeue-rejected: false
 
     data:
         redis:
