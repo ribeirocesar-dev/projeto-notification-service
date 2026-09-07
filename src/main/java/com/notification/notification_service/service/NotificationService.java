@@ -19,7 +19,7 @@ public class NotificationService {
     public NotificationResponseDTO createNotification(NotificationRequestDTO notificationRequestDTO) {
         NotificationEntity notificationEntity = new NotificationEntity(notificationRequestDTO);
         notificationEntity = notificationRepository.save(notificationEntity);
-        notificationProducer.publishNotification(notificationEntity);
+        notificationProducer.publishNotification(notificationEntity.getId());
 
         return new NotificationResponseDTO(
                 notificationEntity.getId(),
