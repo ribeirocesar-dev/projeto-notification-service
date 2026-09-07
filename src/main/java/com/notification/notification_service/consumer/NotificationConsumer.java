@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.notification.notification_service.entity.NotificationEntity;
 import com.notification.notification_service.repository.NotificationRepository;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class NotificationConsumer {
 
+    private final MeterRegistry meterRegistry;
     private final NotificationRepository notificationRepository;
     private final StringRedisTemplate redisTemplate;
 
@@ -33,6 +35,7 @@ public class NotificationConsumer {
 
         if (Boolean.FALSE.equals(isNewProcess)) {
             log.warn("Notification already sent or in processing for ID: {}", notificationEntity.getId());
+            meterRegistry.counter("notification.sent.duplicated").increment();
             return;
         }
 
@@ -41,11 +44,13 @@ public class NotificationConsumer {
 
             if ("fail@test.com".equalsIgnoreCase(notificationEntity.getRecipient())) {
                 log.error("Simulated error by sending email to: {}", notificationEntity.getRecipient());
+                meterRegistry.counter("notification.sent.failed").increment();
                 throw new RuntimeException("Email provider failed");
             }
 
             notificationEntity.setStatusSent();
             notificationRepository.save(notificationEntity);
+            meterRegistry.counter("notification.sent.success").increment();
             log.info("Notification sent successfully for ID: {}", notificationEntity.getId());
 
         } catch (Exception e) {
@@ -59,6 +64,7 @@ public class NotificationConsumer {
     @RabbitListener(queues = "${notification.queues.dlq}")
     public void consumeDeadLetterQueue(UUID notificationUUID) {
         log.warn("Received message on DLQ for ID: {}", notificationUUID);
+        meterRegistry.counter("notification.dlq.processed").increment();
 
         notificationRepository.findById(notificationUUID).ifPresentOrElse(entity -> {
             entity.setStatusFailed();
