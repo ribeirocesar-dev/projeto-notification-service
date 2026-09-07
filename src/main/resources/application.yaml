@@ -1,0 +1,54 @@
+server:
+    port: 8080
+
+spring:
+    application:
+        name: notification-service
+
+    datasource:
+        url: jdbc:postgresql://localhost:5433/notification_db
+        username: admin
+        password: adminpassword
+        driver-class-name: org.postgresql.Driver
+
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
+
+    data:
+        redis:
+            host: localhost
+            port: 6379
+
+    mail:
+        host: sandbox.smtp.mailtrap.io
+        port: 2525
+        username: SEU_USUARIO_MAILTRAP
+        password: SUA_SENHA_MAILTRAP
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+
+notification:
+    queues:
+        email: notification.email.queue
+        dlq: notification.email.dlq
+    exchanges:
+        main: notification.direct.exchange
+        dlx: notification.dlx.exchange
+    routing-keys:
+        email: notification.email.routing
+        dlq: notification.email.dlq.routing
