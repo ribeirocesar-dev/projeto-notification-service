@@ -52,3 +52,16 @@ notification:
     routing-keys:
         email: notification.email.routing
         dlq: notification.email.dlq.routing
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health, info, metrics, prometheus
+    endpoint:
+        health:
+            show-details: always
+    prometheus:
+        metrics:
+            export:
+                enabled: true
