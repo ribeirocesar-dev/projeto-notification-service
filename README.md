@@ -23,20 +23,6 @@ O serviço adota o padrão **Event-Driven Architecture (EDA)** combinando o padr
 
 ---
 
-## Variáveis de Ambiente
-
-| Variável | Descrição | Valor Padrão |
-| :--- | :--- | :--- |
-| `SPRING_DATASOURCE_URL` | URL de conexão do PostgreSQL | `jdbc:postgresql://localhost:5432/notification_db` |
-| `SPRING_DATASOURCE_USERNAME` | Usuário do PostgreSQL | `postgres` |
-| `SPRING_DATASOURCE_PASSWORD` | Senha do PostgreSQL | `postgres` |
-| `SPRING_RABBITMQ_HOST` | Host do RabbitMQ | `localhost` |
-| `SPRING_RABBITMQ_PORT` | Porta AMQP do RabbitMQ | `5672` |
-| `SPRING_DATA_REDIS_HOST` | Host do Redis | `localhost` |
-| `SPRING_DATA_REDIS_PORT` | Porta do Redis | `6379` |
-
----
-
 ## Execução com Docker
 
 Um arquivo `docker-compose.yml` está disponível para subir toda a infraestrutura necessária (PostgreSQL, RabbitMQ e Redis) com um único comando.
